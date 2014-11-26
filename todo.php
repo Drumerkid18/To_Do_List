@@ -8,7 +8,8 @@ do {
     // Iterate through list items
     foreach ($items as $key => $item) {
         // Display each item and a newline
-        echo "[{++$key}] {$item}\n";
+        ++$key;
+        echo "[{$key}] {$item}\n";
     }
 
     // Show the menu options
@@ -31,6 +32,8 @@ do {
         $key = trim(fgets(STDIN)) - 1;
         // Remove from array
         unset($items[$key]);
+        $items = array_values($items);
+
     }
 // Exit when input is (Q)uit
 } while (strtoupper($input) != 'Q');
