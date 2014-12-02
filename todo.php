@@ -79,7 +79,13 @@ do {
 
 
     // Check for actionable input
-    if (($input) == 'N') {
+    if(($input) == 'F'){
+        array_shift($items);
+
+    } elseif (($input) == 'L'){
+        array_pop($items);
+
+    } elseif (($input) == 'N') {
         $newItem = '';
         $items = donde($items, $newItem);
         // Ask for entry
