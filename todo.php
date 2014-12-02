@@ -12,7 +12,6 @@ function listItems($items){
     }
         return $string;
 }
-
 // This function accepts a parameter boolean, which tells us whether or not to return uppercase.
 function getInput($upper = false){
 
@@ -20,12 +19,26 @@ function getInput($upper = false){
     $cleaninput = trim(fgets(STDIN));
 
     // Only sometimes will we modify the input to uppercase, before returning. 
-    if ($upper == true) {
+    if ($upper) {
         $cleaninput = strtoupper($cleaninput);
     }
-
+    
     // Return user input 
     return $cleaninput;
+ }
+
+ function sortMenu ($items, $sort){
+
+    if($sort == 'A'){
+        sort($items);
+    }elseif($sort == 'Z'){
+        rsort($items);
+    }elseif($sort == 'O'){
+        ksort($items);
+    }elseif($sort == 'R'){
+        krsort($items);
+    }
+    return $items;
  }
 
 // The loop!
@@ -36,7 +49,7 @@ do {
     // Iterate through list items
 
     // Show the menu options
-    echo '(N)ew item, (R)emove item, (Q)uit : ';
+    echo '(N)ew item, (R)emove item, (S)ort, (Q)uit : ';
 
     // Get the input from user
     // Use trim() to remove whitespace and newline
@@ -58,6 +71,13 @@ do {
         unset($items[$key]);
         $items = array_values($items);
 
+    } elseif (($input) == 'S'){
+        echo '(A)-Z, (Z)-A, (O)rder entered, (R)everse order entered: ';
+        // User chooses option to sort
+        $sort = getinput(true);
+
+        // Use that input to pass to function to choose sorting option
+        $items = sortMenu($items, $sort);
     }
 // Exit when input is (Q)uit
 } while (($input) != 'Q');
