@@ -47,15 +47,21 @@ function getInput($upper = false){
     }
     return $items;
  }
-    // if($sort == 'A'){
-    //     sort($items);
-    // }elseif($sort == 'Z'){
-    //     rsort($items);
-    // }elseif($sort == 'O'){
-    //     ksort($items);
-    // }elseif($sort == 'R'){
-    //     krsort($items);
-    // }
+
+function donde($items, $newItem){
+        echo 'Would like to add item to (B)eginning or (E)nd of List ';
+        $newInput = getInput(true);
+    if ($newInput == 'B'){
+        echo 'Enter Item: ';
+        $newItem = getInput();
+        array_unshift($items, $newItem);
+    }elseif($newInput == 'E'){
+        echo 'Enter Item: ';
+        $newItem = getInput();
+        array_push($items, $newItem);
+    }
+    return $items;
+}
 
 // The loop!
 do {
@@ -74,10 +80,13 @@ do {
 
     // Check for actionable input
     if (($input) == 'N') {
+        $newItem = '';
+        $items = donde($items, $newItem);
         // Ask for entry
-        echo 'Enter item: ';
+        // echo 'Enter item: ';
         // Add entry to list array
-        $items[] = getinput();
+        // $items[] = getinput();
+
     } elseif (($input) == 'R') {
         // Remove which item?
         echo 'Enter item number to remove: ';
@@ -87,7 +96,7 @@ do {
         unset($items[$key]);
         $items = array_values($items);
 
-    } elseif (($input) == 'S'){
+    } elseif (($input) == 'S') {
         echo '(A)-Z, (Z)-A, (O)rder entered, (R)everse order entered: ';
         // User chooses option to sort
         $sort = getinput(true);
