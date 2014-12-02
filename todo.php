@@ -28,18 +28,34 @@ function getInput($upper = false){
  }
 
  function sortMenu ($items, $sort){
+    switch ($sort) {
+        case 'A':
+            asort($items);
+            break;
+        
+        case 'Z':
+            arsort($items);
+            break;
 
-    if($sort == 'A'){
-        sort($items);
-    }elseif($sort == 'Z'){
-        rsort($items);
-    }elseif($sort == 'O'){
-        ksort($items);
-    }elseif($sort == 'R'){
-        krsort($items);
+        case 'O':
+            ksort($items);
+            break;
+
+        case 'R':
+            krsort($items);
+            break; 
     }
     return $items;
  }
+    // if($sort == 'A'){
+    //     sort($items);
+    // }elseif($sort == 'Z'){
+    //     rsort($items);
+    // }elseif($sort == 'O'){
+    //     ksort($items);
+    // }elseif($sort == 'R'){
+    //     krsort($items);
+    // }
 
 // The loop!
 do {
