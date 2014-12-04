@@ -63,6 +63,21 @@ function donde($items, $newItem){
     return $items;
 }
 
+function whatFile($filename){
+    $contentsArray = [];
+
+    if(filesize($filename) == 0){
+        echo 'file has no contents' . PHP_EOL;
+    } else{
+        $handle = fopen($filename, 'r');
+        $contents = fread($handle, filesize($filename));
+        $contentsArray = explode(PHP_EOL, trim($contents));
+        fclose($handle);
+    }
+
+    return $contentsArray;
+}
+
 // The loop!
 do {
 
@@ -71,7 +86,7 @@ do {
     // Iterate through list items
 
     // Show the menu options
-    echo '(N)ew item, (R)emove item, (S)ort, (Q)uit : ';
+    echo '(O)pen (N)ew item, (R)emove item, (S)ort, (Q)uit : ';
 
     // Get the input from user
     // Use trim() to remove whitespace and newline
@@ -82,8 +97,16 @@ do {
     if(($input) == 'F'){
         array_shift($items);
 
-    } elseif (($input) == 'L'){
+    } elseif (($input) == 'L') {
         array_pop($items);
+
+    } elseif(($input) =='O') {
+        $filename = '';
+        echo 'What file would you like to open?' . PHP_EOL;
+        $filename = getInput();
+        
+        $importedItems = whatFile($filename);
+        $items = array_merge($items, $importedItems);
 
     } elseif (($input) == 'N') {
         $newItem = '';
