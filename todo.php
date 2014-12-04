@@ -78,6 +78,31 @@ function whatFile($filename){
     return $contentsArray;
 }
 
+function doesItExist($filename){
+
+    while (file_exists($filename)){
+        echo 'File already exist, do you wish to overwrite? (Y)/(N) ';
+        $input = getInput(true);
+        if(($input) == 'N'){
+            echo 'Enter New File name ';
+            $filename = getInput();
+
+        }elseif(($input) == 'Y'){
+            return $filename;
+        }
+    }
+    return $filename;
+}
+
+function saveFile($filename, $array){
+    
+    $handle = fopen($filename, 'w');
+    foreach ($array as $item) {
+        fwrite($handle, $item . PHP_EOL);
+    }
+    fclose($handle);
+}
+
 // The loop!
 do {
 
@@ -86,7 +111,7 @@ do {
     // Iterate through list items
 
     // Show the menu options
-    echo '(O)pen (N)ew item, (R)emove item, (S)ort, (Q)uit : ';
+    echo '(O)pen, S(A)ve, (N)ew item, (R)emove item, (S)ort, (Q)uit : ';
 
     // Get the input from user
     // Use trim() to remove whitespace and newline
@@ -99,6 +124,17 @@ do {
 
     } elseif (($input) == 'L') {
         array_pop($items);
+
+    } elseif (($input) == 'A'){
+        echo 'Enter New File name or (A)bort' . PHP_EOL;
+        $filename = getInput();
+        if(($filename) != 'A' || 'a'){
+            doesItExist($filename);
+            saveFile($filename, $items);
+            echo 'File Saved!';
+        }else{
+            continue;
+        }
 
     } elseif(($input) =='O') {
         $filename = '';
