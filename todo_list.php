@@ -16,35 +16,17 @@
 
 	</style>
 	<?php
+	define('FILE', '../todo_list/data/test.txt');
+	require_once '../classes/toDoDataStore.php';
+
+	$toDoData = new ToDoDataStore(FILE);
+
+	$toDoData->toDoList = $toDoData->whatFile();
+
 
 	// Verify there were uploaded files and no errors
 
-	$toDoList = array('Wash Car', 'Bath Dog', 'Clean Room', 'Scrub Tub');
-	function whatFile($filename){
-	    $contentsArray = [];
 
-	    if(filesize($filename) > 0){
-	        $handle = fopen($filename, 'r');
-	        $contents = trim(fread($handle, filesize($filename)));
-	        $contentsArray = explode(PHP_EOL, trim($contents));
-	        fclose($handle);
-	    } else{
-	        echo 'file has no contents' . PHP_EOL;
-	    }
-
-	    return $contentsArray;
-	}
-	
-	$toDoList = whatFile('../todo_list/data/test.txt');
-	
-	function saveFile($filename, $array){
-	    
-	    $handle = fopen($filename, 'w');
-	    foreach ($array as $item) {
-	        fwrite($handle, $item . PHP_EOL);
-	    }
-	    fclose($handle);
-	}
 
 	if (count($_FILES) > 0 && $_FILES['file1']['error'] == UPLOAD_ERR_OK) {
 	    // Set the destination directory for uploads
@@ -59,9 +41,9 @@
 	    if(substr($filename, -3) == 'txt'){
 		    // Move the file from the temp location to our uploads directory
 		    move_uploaded_file($_FILES['file1']['tmp_name'], $savedFilename);
-		    $uploadedToDoList = whatFile($savedFilename);
-		    $toDoList = array_merge($toDoList, $uploadedToDoList);
-		    saveFile('../todo_list/data/test.txt', $toDoList);
+		    $uploadedToDoList = $toDoData->whatFile($savedFilename);
+		    $toDoData->toDoList = array_merge($toDoData->toDoList, $uploadedToDoList);
+		    $toDoData->saveFile($toDoData->toDoList);
 
 			}else{
 				echo "There was an error in processing your file, please use 'txt' file type.";
@@ -69,16 +51,16 @@
 	}
 
 	if(isset($_POST['item']) && !empty($_POST['item'])){
-		$toDoList[] = htmlentities(strip_tags($_POST['item']));
-		saveFile('../todo_list/data/test.txt', $toDoList);
+		$toDoData->toDoList[] = htmlentities(strip_tags($_POST['item']));
+		$toDoData->saveFile($toDoData->toDoList);
 	}
 
 	if(isset($_GET['remove'])){
 		$key = $_GET['remove'];
         // Remove from array
-        unset($toDoList[$key]);
-        $toDoList = array_values($toDoList);
-		saveFile('../todo_list/data/test.txt', $toDoList);
+        unset($toDoData->toDoList[$key]);
+        $toDoData->toDoList = array_values($toDoData->toDoList);
+		$toDoData->saveFile($toDoData->toDoList);
 	}
 
 	?>
@@ -88,7 +70,7 @@
 	<div class="align">
 	<div id ="container">
 	<ul>
-		<? foreach ($toDoList as $key => $value): ?>
+		<? foreach ($toDoData->toDoList as $key => $value): ?>
 			<li><?= $value ?> <a href='../todo_list/todo_list.php?remove=<?= $key ?>'> <i class='fa fa-times fa-lg'></i></a></li>
 			<? endforeach; ?>
 
